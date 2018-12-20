@@ -2,6 +2,8 @@
 title: "Projecte 2"
 ---
 
+Mapa de l'abstenció i vots als comuns
+
 ```{r load myData, include=FALSE}
 load("mapadata.RData")
 ```
