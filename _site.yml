@@ -1,20 +1,11 @@
-<<<<<<< HEAD
 name: "my-website"
 output_dir: "."
 navbar:
-  title: "My Website"
+  title: "Data Visualisation"
   left:
     - text: "Home"
       href: index.html
-    - text: "About Me"
-=======
-name: "my-website"
-output_dir: "."
-navbar:
-  title: "My Website"
-  left:
-    - text: "Home"
-      href: index.html
-    - text: "About Me"
->>>>>>> 2e8cfdb7d21350526505a2c2d115d026fa635df9
+    - text: "About me"
       href: about.html
+    - text: "Projecte"
+      href: projecte2.html

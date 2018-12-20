@@ -1,14 +1,5 @@
-<<<<<<< HEAD
-
 ---
 title: "Marta's Website"
 ---
 
-=======
-
----
-title: "Marta's Website"
----
-
->>>>>>> 2e8cfdb7d21350526505a2c2d115d026fa635df9
-Hola!
+Hola! :)
