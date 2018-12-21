@@ -1,0 +1,11 @@
+name: "martas-website"
+output_dir: "."
+navbar:
+  title: "Data Visualisation"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "About Me"
+      href: about.html
+    - text: "Projecte"
+      href: projecte2.html
