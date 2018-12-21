@@ -2,4 +2,4 @@
 title: "About Me"
 ---
 
-Sociòloga i estadista de Barcelona. 
+SociÃ²loga i estadista de Barcelona. 
