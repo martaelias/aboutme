@@ -1,0 +1,64 @@
+---
+title: "Projects"
+output: html_document
+---
+
+#remove backslashes before ticks to get this to work. 
+```{r include=FALSE}
+library(leaflet)
+library(raster)
+library(dplyr)
+```
+
+```{r echo=FALSE}
+shp <- shapefile("C:/Users/WINDIEZ/Desktop/DATACAMP/barcelona_neighbourhoods/barcelona_neighbourhoods")
+
+ljbarris <-read.csv("leftjoin_barris.csv", header=TRUE, sep=";")
+ljbarris[,"Districte"] <-as.character(ljbarris[,"Districte"])
+ljbarris[,"numbarri"] <-as.character(ljbarris[,"numbarri"])
+
+shp@data$cbarri <- c("34","37", "11", "12", "16", "22", "23", "25", "58", "51", "32", "59",
+                     "72", "9", "8", "71", "1", "5", "2","7", "3", "4", "6", "10",
+                     "15", "14", "17", "18", "68", "19", "20", "13", "21", "64", "31",
+                     "24", "26", "30","27", "29", "33", "73", "45", "28", "36", "46",
+                     "22", "35", "38", "39", "40", "42", "43", "44", "41", "47", "52",
+                     "53", "65", "55", "48", "49", "67", "50", "56", "61", "54", "57",
+                     "66", "22", "62", "63", "60", "69", "70")
+
+shp@data <- shp@data %>% 
+  left_join(ljbarris, by = c("cbarri" = "numbarri"))
+
+pal <- colorNumeric(
+  palette = "Blues",
+  domain = c(0,50))
+
+labels <- sprintf(
+  "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
+  shp@data$Barri, shp@data$Abstencio, shp@data$BComu) %>% lapply(htmltools::HTML)
+
+shp@data$lon <-as.numeric(gsub(",", ".", shp@data$lon))
+shp@data$lat <-as.numeric(gsub(",", ".", shp@data$lat))
+
+shp %>%
+  leaflet() %>%
+  #addTiles() %>%
+  addProviderTiles("CartoDB") %>%
+  # set boundary thickness to 1 and color polygons
+  addPolygons(weight = 1,
+              color = ~pal(BComu),
+              opacity = 0.8,
+              fillOpacity = 0.8,
+              label = labels) %>%
+  
+  addCircleMarkers(lng= shp@data$lon , lat=shp@data$lat, radius = ~(shp@data$Abstencio)/5, color = "black", weight=1, fillColor ="black",
+                   fillOpacity = 1,
+                   # add labels
+                   label = labels) %>%
+  
+  addLegend(pal = pal,
+            values = c(0:40),
+            opacity = 0.75,
+            title = "% votants",
+            position = "topright")
+              
+```
