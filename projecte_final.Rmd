@@ -1,145 +1,144 @@
 ---
 runtime: shiny
-output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ```{r load myData, include=FALSE, cache=TRUE}
 library(shiny)
 library(leaflet)
 library(sp)
-load("mapadata2.RData")
+library(dplyr)
+library(raster)
+load("mapadata_mateixdir.RData")
 ```
 
 
 ```{r, echo=FALSE}
-#```{r tabsets, echo=FALSE}
-#```{r eruptions, echo=FALSE}
 library(shiny)
 library(leaflet)
 library(sp)
+library(dplyr)
+library(raster)
+
 shinyApp(
-  ui = fluidPage(
-  titlePanel("Relació entre l'abstenció i el vot de cada partit per districte"),
-  
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("var", 
-                  label = "Partit Polític, eleccions 2015",
-                  choices = c("BComu", 
-                              "CIU",
-                              "Cs", 
-                              "ERC",
-                              "PSC",
-                              "PP",
-                              "CUP"),
-                  selected = "BComu")),
+  server = function(input, output) {
+    output$map <- renderLeaflet({
+      data <- switch(input$var, 
+                     "BComu" = shp@data$BComu,
+                     "CIU" = shp@data$CIU,
+                     "Cs" = shp@data$Cs,
+                     "ERC" = shp@data$ERC,
+                     "PSC" = shp@data$PSC,
+                     "PP" = shp@data$PP,
+                     "CUP"= shp@data$CUP)
+      
+      if (data == shp@data$BComu){
+        pal <- colorNumeric(
+          palette = "Purples",
+          domain = c(0,50))
+        
+        labels <- sprintf(
+          "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
+          shp@data$Barri, shp@data$Abstencio, shp@data$BComu) %>% lapply(htmltools::HTML)
+      }else if (data == shp@data$CIU){
+        pal <- colorNumeric(
+          palette = c("#EBF5FB", "#D6EAF8", "#AED6F1", "#85C1E9", "#5DADE2", "#3498DB", "#2E86C1",
+                      "#2874A6", "#21618C"),
+          domain = c(0,50))
+        
+        labels <- sprintf(
+          "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
+          shp@data$Barri, shp@data$Abstencio, shp@data$CIU) %>% lapply(htmltools::HTML)
+      }else if (data == shp@data$Cs){
+        pal <- colorNumeric(
+          palette = "Oranges",
+          domain = c(0,50))
+        
+        labels <- sprintf(
+          "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
+          shp@data$Barri, shp@data$Abstencio, shp@data$Cs) %>% lapply(htmltools::HTML)
+      }else if (data == shp@data$ERC){
+        pal <- colorNumeric(
+          palette = c("#FBEEE6", "#F6DDCC", "#EDBB99", "#E59866", "#DC7633", "#D35400", "#BA4A00",
+                      "#A04000", "#873600"),
+          domain = c(0,50))
+        
+        labels <- sprintf(
+          "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
+          shp@data$Barri, shp@data$Abstencio, shp@data$ERC) %>% lapply(htmltools::HTML)
+      }else if (data == shp@data$PSC){
+        pal <- colorNumeric(
+          palette = "Reds",
+          domain = c(0,50))
+        
+        labels <- sprintf(
+          "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
+          shp@data$Barri, shp@data$Abstencio, shp@data$PSC) %>% lapply(htmltools::HTML)
+      }else if (data == shp@data$PP) {
+        pal <- colorNumeric(
+          palette = "Blues",
+          domain = c(0,50))
+        
+        labels <- sprintf(
+          "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
+          shp@data$Barri, shp@data$Abstencio, shp@data$PP) %>% lapply(htmltools::HTML)
+      }else if (data == shp@data$CUP){
+        pal <- colorNumeric(
+          palette = c("#FEF9E7", "#FCF3CF", "#F9E79F", "#F7DC6F", "#F4D03F", "#F1C40F", "#D4AC0D",
+                      "#B7950B", "#9A7D0A"),
+          domain = c(0,50))
+        
+        labels <- sprintf(
+          "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
+          shp@data$Barri, shp@data$Abstencio, shp@data$CUP) %>% lapply(htmltools::HTML)
+      }
+      
+      
+      map  <- shp %>%
+        leaflet() %>%
+        #addTiles() %>%
+        addProviderTiles("CartoDB") %>%
+        # set boundary thickness to 1 and color polygons
+        addPolygons(weight = 1,
+                    color = ~pal(data),
+                    opacity = 0.8,
+                    fillOpacity = 0.8,
+                    label = labels) %>%
+        
+        addCircleMarkers(lng= shp@data$lon , lat=shp@data$lat, radius = ~(shp@data$Abstencio)/5, color = "black", weight=1, fillColor ="black",
+                         fillOpacity = 1,
+                         # add labels
+                         label = labels) %>%
+        
+        addLegend(pal = pal,
+                  values = c(0:40),
+                  opacity = 0.75,
+                  title = "% votants",
+                  position = "topright")
+      map
+    })},
+    ui = fluidPage(
+    titlePanel("Relació entre l'abstenció i el vot de cada partit per districte"),
     
-    mainPanel(
-      leafletOutput("map"))
-  )
-),
-server = function(input, output) {
-  output$map <- renderLeaflet({
-    data <- switch(input$var, 
-                   "BComu" = shp@data$BComu,
-                   "CIU" = shp@data$CIU,
-                   "Cs" = shp@data$Cs,
-                   "ERC" = shp@data$ERC,
-                   "PSC" = shp@data$PSC,
-                   "PP" = shp@data$PP,
-                   "CUP"= shp@data$CUP)
-    
-    if (data == shp@data$BComu){
-      pal <- colorNumeric(
-        palette = "Purples",
-        domain = c(0,50))
+    sidebarLayout(
+      sidebarPanel(
+        selectInput("var", 
+                    label = "Partit Polític, eleccions 2015",
+                    choices = c("BComu", 
+                                "CIU",
+                                "Cs", 
+                                "ERC",
+                                "PSC",
+                                "PP",
+                                "CUP"),
+                    selected = "BComu")),
       
-      labels <- sprintf(
-        "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
-        shp@data$Barri, shp@data$Abstencio, shp@data$BComu) %>% lapply(htmltools::HTML)
-    }else if (data == shp@data$CIU){
-      pal <- colorNumeric(
-        palette = c("#EBF5FB", "#D6EAF8", "#AED6F1", "#85C1E9", "#5DADE2", "#3498DB", "#2E86C1",
-                    "#2874A6", "#21618C"),
-        domain = c(0,50))
-      
-      labels <- sprintf(
-        "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
-        shp@data$Barri, shp@data$Abstencio, shp@data$CIU) %>% lapply(htmltools::HTML)
-    }else if (data == shp@data$Cs){
-      pal <- colorNumeric(
-        palette = "Oranges",
-        domain = c(0,50))
-      
-      labels <- sprintf(
-        "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
-        shp@data$Barri, shp@data$Abstencio, shp@data$Cs) %>% lapply(htmltools::HTML)
-    }else if (data == shp@data$ERC){
-      pal <- colorNumeric(
-        palette = c("#FBEEE6", "#F6DDCC", "#EDBB99", "#E59866", "#DC7633", "#D35400", "#BA4A00",
-                    "#A04000", "#873600"),
-        domain = c(0,50))
-      
-      labels <- sprintf(
-        "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
-        shp@data$Barri, shp@data$Abstencio, shp@data$ERC) %>% lapply(htmltools::HTML)
-    }else if (data == shp@data$PSC){
-      pal <- colorNumeric(
-        palette = "Reds",
-        domain = c(0,50))
-      
-      labels <- sprintf(
-        "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
-        shp@data$Barri, shp@data$Abstencio, shp@data$PSC) %>% lapply(htmltools::HTML)
-    }else if (data == shp@data$PP) {
-      pal <- colorNumeric(
-        palette = "Blues",
-        domain = c(0,50))
-      
-      labels <- sprintf(
-        "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
-        shp@data$Barri, shp@data$Abstencio, shp@data$PP) %>% lapply(htmltools::HTML)
-    }else if (data == shp@data$CUP){
-      pal <- colorNumeric(
-        palette = c("#FEF9E7", "#FCF3CF", "#F9E79F", "#F7DC6F", "#F4D03F", "#F1C40F", "#D4AC0D",
-                    "#B7950B", "#9A7D0A"),
-        domain = c(0,50))
-      
-      labels <- sprintf(
-        "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
-        shp@data$Barri, shp@data$Abstencio, shp@data$CUP) %>% lapply(htmltools::HTML)
-    }
-    
-    
-    map  <- shp %>%
-      leaflet() %>%
-      #addTiles() %>%
-      addProviderTiles("CartoDB") %>%
-      # set boundary thickness to 1 and color polygons
-      addPolygons(weight = 1,
-                  color = ~pal(data),
-                  opacity = 0.8,
-                  fillOpacity = 0.8,
-                  label = labels) %>%
-      
-      addCircleMarkers(lng= shp@data$lon , lat=shp@data$lat, radius = ~(shp@data$Abstencio)/5, color = "black", weight=1, fillColor ="black",
-                       fillOpacity = 1,
-                       # add labels
-                       label = labels) %>%
-      
-      addLegend(pal = pal,
-                values = c(0:40),
-                opacity = 0.75,
-                title = "% votants",
-                position = "topright")
-  })
-},
-options = list(height = 500)
+      mainPanel(
+        leafletOutput("map"))
+    )
+  ),
+  options = list(height = 500)
 )
 ```
+
 
 

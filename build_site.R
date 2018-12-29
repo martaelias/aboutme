@@ -14,6 +14,7 @@ library(knitr)
 rmarkdown::render_site()
 rmarkdown::render('projecte_final.Rmd')
 
+
 ## INSTRUCCIONS QUE HE SEGUIT :)))
 
 # git rebase
