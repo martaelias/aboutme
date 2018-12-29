@@ -1,19 +1,26 @@
 ---
-output: html_document
 runtime: shiny
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r load myData, include=FALSE}
+```{r load myData, include=FALSE, cache=TRUE}
 library(shiny)
 library(leaflet)
+library(sp)
 load("mapadata2.RData")
 ```
 
-```{r eruptions, echo=FALSE}
+
+```{r, echo=FALSE}
+#```{r tabsets, echo=FALSE}
+#```{r eruptions, echo=FALSE}
+library(shiny)
+library(leaflet)
+library(sp)
 shinyApp(
   ui = fluidPage(
   titlePanel("Relació entre l'abstenció i el vot de cada partit per districte"),
@@ -130,7 +137,8 @@ server = function(input, output) {
                 title = "% votants",
                 position = "topright")
   })
-}
+},
+options = list(height = 500)
 )
 ```
 
