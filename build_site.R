@@ -9,9 +9,10 @@ setwd("C:/Users/WINDIEZ/Desktop/PostDeloitte/paginaweb")
 library(shiny)
 #install.packages("knitr")
 library(knitr)
-
+library(leaflet)
 #render your sweet site. 
 rmarkdown::render_site()
+rmarkdown::render('projecte_final.Rmd')
 
 ## INSTRUCCIONS QUE HE SEGUIT :)))
 

@@ -33,7 +33,7 @@ pal <- colorNumeric(
   domain = c(0,50))
 
 labels <- sprintf(
-  "<strong>%s</strong><br/> Abstenció: %g%% <br/> Vot: %g%%",
+  "<strong>%s</strong><br/> Abstenci?: %g%% <br/> Vot: %g%%",
   shp@data$Barri, shp@data$Abstencio, shp@data$BComu) %>% lapply(htmltools::HTML)
 
 shp@data$lon <-as.numeric(gsub(",", ".", shp@data$lon))
