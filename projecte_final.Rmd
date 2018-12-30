@@ -1,14 +1,23 @@
 ---
 runtime: shiny
+output: html_document
 ---
 
-```{r load myData, include=FALSE, cache=TRUE}
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = TRUE)
+```
+
+
+```{r load, include=FALSE}
 library(shiny)
 library(leaflet)
+library(knitr)
 library(sp)
 library(dplyr)
 library(raster)
-load("mapadata_mateixdir.RData")
+library(repmis)
+source_data("https://github.com/martaelias/freedataviz/blob/master/mapadata2.RData?raw=True")
 ```
 
 
@@ -114,7 +123,7 @@ shinyApp(
                   opacity = 0.75,
                   title = "% votants",
                   position = "topright")
-      map
+      
     })},
     ui = fluidPage(
     titlePanel("Relació entre l'abstenció i el vot de cada partit per districte"),
