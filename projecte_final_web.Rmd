@@ -1,0 +1,14 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## El rollazo
+
+En les últimes eleccions va passar això i allò...
+
+
