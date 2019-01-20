@@ -1,12 +1,6 @@
-name: "martas-website"
+name: "About me"
 output_dir: "."
 runtime: shiny
 navbar:
-  title: "Data Visualisation"
-  left:
-    - text: "Home"
-      href: index.html
-    - text: "About Me"
-      href: about.html
-    - text: "Projecte"
-      href: projecte_final_web.html
+  title: "About me"
+  href: aboutme.html
