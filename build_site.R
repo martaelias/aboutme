@@ -12,7 +12,7 @@ library(knitr)
 
 #render your sweet site. 
 rmarkdown::render_site()
-rmarkdown::render('projecte_final.Rmd')
+rmarkdown::render('projecte_final_web.Rmd')
 
 
 ## INSTRUCCIONS QUE HE SEGUIT :)))
