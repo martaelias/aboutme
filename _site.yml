@@ -3,4 +3,4 @@ output_dir: "."
 runtime: shiny
 
 title: "Sobre mi"
-href: aboutme2.html
+href: index.html
