@@ -3,4 +3,4 @@ output_dir: "."
 runtime: shiny
 navbar:
   title: "About me"
-  href: aboutme.html
+  href: aboutme2.html
