@@ -1,6 +1,6 @@
 name: "About me"
 output_dir: "."
 runtime: shiny
-navbar:
-  title: "About me"
-  href: aboutme2.html
+
+title: "About me"
+href: aboutme2.html
