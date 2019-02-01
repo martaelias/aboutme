@@ -1,6 +1,9 @@
 name: "Sobre mi"
 output_dir: "."
 runtime: shiny
-
-title: "Sobre mi"
-href: index.html
+navbar:
+  title: "Sobre mi"
+  href: index.html
+  left:
+    - text: "English"
+      href: englishv.html

@@ -1,3 +1,4 @@
+
 #Set our working directory. 
 #This helps avoid confusion if our working directory is 
 #not our site because of other projects we were 
@@ -5,13 +6,13 @@
 setwd("C:/Users/WINDIEZ/Desktop/PostDeloitte/paginaweb")
 
 #install.packages("shiny")
-#library(shiny)
+library(shiny)
 #install.packages("knitr")
 library(knitr)
 
 #render your sweet site. 
 rmarkdown::render_site()
-rmarkdown::render('aboutme2.Rmd')
+rmarkdown::render('projecte_final_web.Rmd')
 
 
 ## INSTRUCCIONS QUE HE SEGUIT :)))
@@ -23,7 +24,7 @@ rmarkdown::render('aboutme2.Rmd')
 # https://stackoverflow.com/questions/37937984/git-refusing-to-merge-unrelated-histories-on-rebase
 
 # En els settings apareix on posar el githubpages:
-# https://github.com/martaelias/freedataviz/settings #li adjudiques/dius on est√† la info del repositori
+# https://github.com/martaelias/freedataviz/settings #li adjudiques/dius on est‡ la info del repositori
 # https://martaelias.github.io/freedataviz/
 
 # El tutorial que hem seguit: http://nickstrayer.me/RMarkdown_Sites_tutorial/
